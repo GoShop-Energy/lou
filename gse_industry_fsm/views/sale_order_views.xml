@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form_service" model="ir.ui.view">
+            <field name="name">sale.order.service</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority">99</field>
+            <field name="arch" type="xml"> 
+                <xpath expr="//page[@name='other_information']" position="after"> 
+                    <page string="Service Instructions" name="instruction" attrs="{'invisible': [('has_service', '=', False)]}" >
+                        <group>
+                            <field 
+                            name="instruction" 
+                            placeholder="Service Instruction notes..."
+                            attrs="{'required': [('has_service', '=', True), ('state', 'in', ['draft', 'sent'])]}"
+                            nolabel="1" colspan="2"/>
+                        </group>
+                    </page>
+                </xpath>
+                <xpath expr="//group[@name='partner_details']/field[@name='partner_shipping_id']" position="after">
+                    <field name="partner_service_id" string="Service Location" readonly="False"/>
+                    <field name="parent_id" invisible="1" />
+                    <field name="has_service" invisible="1" />
+                    <field name="tasks_count" invisible="1" />
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

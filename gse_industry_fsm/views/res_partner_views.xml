@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_form_service" model="ir.ui.view">
+            <field name="name">res.partner.service</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                    <xpath expr="//notebook//form//sheet//div[@class='text-muted oe_edit_only']//p[5]" position="after">
+                        <p class="mb-0" attrs="{'invisible': [('type', '!=', 'field_service')]}">
+                            <span>This field represents the type of Service Location.</span>
+                        </p>
+                    </xpath>
+
+                    <xpath expr="//notebook//form/sheet//group//group[2]//field[@name='mobile']" position="after">
+                        <field name='field_service_type' attrs="{'invisible': [('type', '!=', 'field_service')]}" />
+                        <field name="other_description" attrs="{'invisible': [('field_service_type', '!=', 'other')]}"/>
+                        <field name="equipement_name" attrs="{'invisible': [('type', '!=', 'field_service')]}"/>
+                    </xpath>
+
+                    <xpath expr="//div[@class='o_address_format'][1]" position="after">
+                        <field name='field_service_type' attrs="{'invisible': [('type', '!=', 'field_service')]}" />
+                        <field name="other_description" attrs="{'invisible': [('field_service_type', '!=', 'other')]}"/>
+                        <field name="equipement_name" attrs="{'invisible': [('type', '!=', 'field_service')]}"/>
+                    </xpath>
+                    
+                    <xpath expr="//notebook//templates//div//div[@class='o_kanban_image']" position="replace">
+                        <div class="o_kanban_image">
+                            <img alt="Contact image" attrs="{'invisible': [('type', '=', 'field_service')]}" t-att-src="kanban_image('res.partner', 'avatar_128', record.id.raw_value)"/>
+                            <img alt="Location image" attrs="{'invisible': [('type', '!=', 'field_service')]}" t-att-src="'/gse_industry_fsm/static/src/img/location.png'"/>
+                        </div>
+                    </xpath>
+
+                    <xpath expr="//button[@class='oe_stat_button']" position="before">
+                        <button class="oe_stat_button" type="object" name="get_field_service" string="Service Location" icon="fa-map-marker" context="{'partner_id': active_id, 'partner_name': name}">
+                            <field string="Service Locations" name="service_field_count" widget="statinfo" modifiers="{&quot;readonly&quot;: true}"/>
+                        </button>
+                    </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

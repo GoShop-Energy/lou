@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="worksheet_custom_page_service" inherit_id="industry_fsm_report.worksheet_custom_page">
+        <xpath expr="//t[@t-foreach='doc.user_ids']" position="after">
+             <h6>
+                Task ID: #<span t-field="doc.id"/>
+            </h6>
+        </xpath>      
+        <xpath expr="//div[@class='page']//div[@class='row']//div[1]" position="replace">
+          <div t-attf-class="{{'col-6' if report_type == 'pdf' else 'col-md-6 col-12'}}">
+                <t t-set="index" t-value="0"/>
+                <t t-foreach="doc.user_ids" t-as="user"> 
+                    <div class="mb-3">
+                        <div><strong>Worker: </strong></div>
+                        <div t-out="user" t-options='{
+                            "widget": "contact",
+                            "fields": ["name"]}'
+                        />
+                        <t t-if="index == 0">
+                            <div>+243 991 473 328</div>
+                            <div>sav@goshop.energy</div>
+                        </t>
+                        <t t-set="index" t-value="index + 1"/>
+                    </div>
+                </t>
+                </div>
+        </xpath>  
+    </template>
+    <template id="timesheet_custom_page_service" inherit_id="hr_timesheet.timesheet_project_task_page">
+        <xpath expr="//t[@t-if='doc.allow_timesheets and doc.timesheet_ids']//h2" position="before">
+             <h6>
+                Task ID: #<span t-field="doc.id"/>
+            </h6>
+        </xpath>
+    </template>
+</odoo>
