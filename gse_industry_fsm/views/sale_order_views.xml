@@ -13,7 +13,6 @@
                             <field 
                             name="instruction" 
                             placeholder="Service Instruction notes..."
-                            attrs="{'required': [('has_service', '=', True), ('state', 'in', ['draft', 'sent'])]}"
                             nolabel="1" colspan="2"/>
                         </group>
                     </page>
