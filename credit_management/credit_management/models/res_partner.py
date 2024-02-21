@@ -7,7 +7,7 @@ from odoo import fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    credit_limit = fields.Float(groups=None)
+    credit_limit = fields.Float(groups=None, tracking=True)
     has_overdue_by_x_days = fields.Boolean(
         string="Has Overdue Invoices",
         compute="_compute_check_overdue_invoices",
@@ -23,6 +23,7 @@ class ResPartner(models.Model):
         copy=False,
         help="If True, then holds the DO until"
         "invoices are paid and equals to the total amount on the SO",
+        tracking=True
     )
     individual_credit_limit = fields.Boolean(
         string="Manage Individual Credit Limit",
