@@ -22,7 +22,7 @@ class ProjectTask(models.Model):
     delivery_count = fields.Integer(related="sale_order_id.delivery_count")
     picking_ids = fields.One2many(related="sale_order_id.picking_ids")
     partner_id = fields.Many2one(related="sale_order_id.partner_id")
-    partner_service_id = fields.Many2one(related="sale_order_id.partner_service_id", readonly=False)
+    partner_service_id = fields.Many2one("res.partner", string="Service Location" , readonly=False)
 
     def action_view_delivery(self):
         return self._get_action_view_picking(self.picking_ids)
@@ -54,3 +54,8 @@ class ProjectTask(models.Model):
                 "target": "new",
             }
         return self.partner_service_id.action_partner_navigate()
+    
+    @api.onchange("partner_id", "sale_order_id")
+    def onchange_partner_service_id(self):
+        for task in self:
+            task.partner_service_id = task.partner_id.address_get(['field_service'])['field_service'] if task.partner_id else False
