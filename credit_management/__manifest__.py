@@ -7,7 +7,7 @@
         Credit management options with Partner Credit Hold/Credit Limit""",
     "author": "Sodexis",
     "website": "https://sodexis.com/",
-    "version": "16.0.3.0.0",
+    "version": "16.0.3.0.1",
     "installable": True,
     "license": "OPL-1",
     "depends": [
