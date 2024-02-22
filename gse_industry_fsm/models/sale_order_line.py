@@ -11,6 +11,7 @@ class SaleOrderLine(models.Model):
         values["tag_ids"] = self._prepare_default_tag_id()
         values["description"] = self.order_id.instruction
         values["order_line_table"] = self._compute_order_line_table()
+        values["partner_service_id"] = self.order_id.partner_service_id.id
         return values
 
     def _prepare_default_tag_id(self):
