@@ -5,7 +5,6 @@ from odoo import fields, models
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
-    _description = "Extended Partner Model for Field Service usage"
 
     partner_service_id = fields.Many2one(
         'res.partner',
