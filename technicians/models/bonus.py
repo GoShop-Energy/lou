@@ -163,11 +163,13 @@ class Bonus(models.Model):
             #     }
             # }
             total_timesheet_unit_amount = 0
-            for timesheet in labor_task.timesheet_ids.filtered('unit_amount'):
+            # restricted users can't access / see other users timesheet by default
+            for timesheet in labor_task.sudo().timesheet_ids.filtered('unit_amount'):
                 total_timesheet_unit_amount += timesheet.unit_amount
 
-                if not timesheet.employee_id.contract_id.allow_transport_expenses:
-                    logger.info("This employee isn't allowed to expense transport (set on contract).")
+                running_contract = timesheet.employee_id.sudo().contract_ids.filtered(lambda cont: cont.state == 'open')
+                if not running_contract or not running_contract[0].allow_transport_expenses:
+                    logger.info("This employee isn't allowed to expense transport (set on contract) or has no running contract.")
                     continue
 
                 if timesheet.bonuses_ids:
@@ -176,7 +178,7 @@ class Bonus(models.Model):
 
                 # Create bonus
                 bonus_amount = timesheet.unit_amount * one_hour_reward  # TODO: check if `unit_amount` in minutes?
-                bonus = self.create({
+                bonus = self.sudo().create({
                     'timesheet_id': timesheet.id,
                     'so_line': timesheet.so_line.id,
                     'employee_id': timesheet.employee_id.id,
@@ -212,8 +214,9 @@ class Bonus(models.Model):
                     # company rate
                     continue
 
-                for employee in involved_employees.filtered(lambda empl: empl.contract_id.allow_transport_expenses):
-                    bonus = self.create({
+                # note: `involved_employees` are already ensure to have contract allowing transport expenses
+                for employee in involved_employees:
+                    bonus = self.sudo().create({
                         'so_line': transport_order_line.id,
                         'amount': reward_per_employee,
                         'order_id': order.id,
@@ -281,8 +284,8 @@ class Bonus(models.Model):
             vendor_bill_paid = bonus_vendor_bill_excluded_credit_node.payment_state == 'paid'
             if vendor_bill_paid:
                 # Generate vendor bill credit note to revert bonus
-                revert_bonus = bonus.copy({'amount': -bonus.amount})
+                revert_bonus = bonus.sudo().copy({'amount': -bonus.amount})
                 revert_bonus.add_bonus_on_vendor_bill(credit_note=True)
             else:
                 # Delete bonus
-                bonus.unlink()
+                bonus.sudo().unlink()

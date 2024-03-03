@@ -79,7 +79,7 @@ class SaleOrder(models.Model):
         if any(m.payment_state == 'posted' for m in self.bonuses_ids.vendor_bill_move_ids):
             raise UserError('Cette vente est liée à une commission qui a déjà été payée.')
 
-        self.bonuses_ids.unlink()
+        self.bonuses_ids.sudo().unlink()
 
         return super().action_cancel()
 
