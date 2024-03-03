@@ -14,13 +14,13 @@ class Bonus(models.Model):
     _order = 'id desc'
 
     timesheet_id = fields.Many2one('account.analytic.line', copy=True)
-    so_line = fields.Many2one('sale.order.line', required=1, copy=True)
-    employee_id = fields.Many2one('hr.employee', required=1, copy=True)
-    order_id = fields.Many2one(related='so_line.order_id', store=True, required=1, copy=True)
+    so_line = fields.Many2one('sale.order.line', required=True, copy=True)
+    employee_id = fields.Many2one('hr.employee', required=True, copy=True)
+    order_id = fields.Many2one(related='so_line.order_id', store=True, required=True, copy=True)
     order_date = fields.Datetime(related='order_id.date_order', store=True)
     company_id = fields.Many2one(related='order_id.company_id')
     currency_id = fields.Many2one(related='company_id.currency_id')
-    amount = fields.Monetary(string='Amount', required=1)
+    amount = fields.Monetary(string='Amount', required=True)
     state = fields.Selection(related='order_id.bonus_state')
 
     vendor_bill_move_ids = fields.Many2many(

@@ -7,7 +7,7 @@
             <form string="Technician Transport Expenses" class="oe_form_nomargin">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
-                        <button type="object" name="action_view_invoices" class="oe_stat_button" icon="fa-gift" attrs="{'invisible': [('vendor_bill_move_count', '=', 0)]}" groups="account.group_account_manager">
+                        <button type="object" name="action_view_invoices" class="oe_stat_button" icon="fa-gift" invisible="not vendor_bill_move_count" groups="account.group_account_manager">
                             <field name="vendor_bill_move_count" widget="statinfo" string="Invoices"/>
                         </button>
                     </div>
