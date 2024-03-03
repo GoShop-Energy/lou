@@ -7,7 +7,7 @@
         <field name="priority" eval="50"/>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <div name="performance" position="after">
+            <block name="performance" position="after">
                 <h2>Expenditures</h2>
                 <div class="row mt16 o_settings_container" groups="account.group_account_manager">
                     <div class="col-xs-12 col-md-6 o_setting_box">
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </block>
         </field>
     </record>
 
