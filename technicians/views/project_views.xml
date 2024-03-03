@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <field name="date_assign" position="after">
                 <field name="disallow_transport_expenses" groups="account.group_account_manager"/>
-                <field name="disallow_transport_expenses_reason" attrs="{'invisible': [('disallow_transport_expenses', '=', False)]}" groups="account.group_account_manager"/>
+                <field name="disallow_transport_expenses_reason" invisible="not disallow_transport_expenses" groups="account.group_account_manager"/>
             </field>
         </field>
     </record>
