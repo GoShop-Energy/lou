@@ -9,7 +9,7 @@
     "author": "Benjamin Kisenge",
     "website": "https://github.com/GoShop-Energy/field-service",
     "category": "Customizations",
-    "version": "0.1.8.7",
+    "version": "17.0.0.1",
     "license": "LGPL-3",
     "depends": [
         "base",
