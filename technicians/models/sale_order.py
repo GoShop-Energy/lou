@@ -40,18 +40,20 @@ class SaleOrder(models.Model):
                 order.bonus_state = 'done'
                 continue
 
+            order_lines = order.order_line.filtered(lambda line: not (line.is_downpayment or line.display_type or line.product_uom_qty == 0))
+
             state = None
             if not (order.date_order > fields.Datetime.from_string('2023-05-31 23:59:59')):
                 state = 'before_2023_05_31'
-            elif any(line for line in order.order_line if line.product_uom_qty != line.qty_invoiced):
+            elif any(line for line in order_lines if line.product_uom_qty != line.qty_invoiced):
                 state = 'not_invoiced'
             elif any(move_state not in ('paid', 'reversed') for move_state in order.invoice_ids.mapped('payment_state')):
                 state = 'not_paid'
-            elif not any(line.product_id.service_tracking != 'no' for line in order.order_line):
+            elif not any(line.product_id.service_tracking != 'no' for line in order_lines):
                 state = 'no_services'
             else:
                 precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
-                for line in order.order_line.filtered(lambda l: not (l.is_downpayment or l.display_type)):
+                for line in order_lines:
                     if line.product_id.type == 'service' and line.product_id.service_tracking != 'no':
                         if line.qty_delivered == 0:
                             state = 'not_all_services_given'

@@ -149,6 +149,12 @@ class TestBonus(common.TransactionCase):
             'product_uom_qty': 1,
             'order_id': sale_order.id,
         })
+        # ensure labor products left to 0 qty are not a problem
+        SaleOrderLine.create({
+            'product_id': self.product_order_task_labor_installation.id,
+            'product_uom_qty': 0,
+            'order_id': sale_order.id,
+        })
         # ensure section are not a problem
         SaleOrderLine.create({
             'name': 'This is a section',

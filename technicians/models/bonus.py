@@ -101,7 +101,7 @@ class Bonus(models.Model):
 
         precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
         # keep only consumable + stockable products and services products which generate tasks
-        for line in order.order_line.filtered(lambda l: not (l.is_downpayment or l.display_type)):
+        for line in order.order_line.filtered(lambda line: not (line.is_downpayment or line.display_type or line.product_uom_qty == 0)):
             if line.product_id.type == 'service' and line.product_id.service_tracking != 'no':
                 # As long as something different from 0 has been delivered, it's
                 # ok for the bonus. Eg 30 min will be marked as 0.5/1.
