@@ -24,7 +24,7 @@ class SaleOrder(models.Model):
             ('something_missing', 'Something Missing (task or employee contract disallow transport expenses?)'),
             ('done', 'Granted'),
         ], default='not_invoiced',
-        help='Not Invoiced = not all product have been invoiced', tracking=True,
+        help='Not Invoiced = not all product have been invoiced',
         store=True, compute='_compute_bonus_state',
     )
 

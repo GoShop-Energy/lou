@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Bonuses GSE',
+    'name': 'Transport Bonuses GSE',
     'author': "Sébastien Bühl, Shortcut1337",
     'website': "http://www.goshop.energy",
     'version': '0.1',
