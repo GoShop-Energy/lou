@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-
+from odoo.exceptions import AccessError
 
 class ProjectTask(models.Model):
     _inherit = "project.task"
@@ -59,3 +59,43 @@ class ProjectTask(models.Model):
     def onchange_partner_service_id(self):
         for task in self:
             task.partner_service_id = task.partner_id.address_get(['field_service'])['field_service'] if task.partner_id else False
+
+    @api.onchange("stage_id")
+    def onchange_stage_id(self):
+        if self.stage_id and self.stage_id.name == 'Done':
+            user = self.env.user
+            if not user.has_group('gse_access_rights.group_stock_validator'):
+                raise AccessError("You don't have permission to perform this action.")
+            
+            if not self.is_task_done():
+                raise AccessError("Mandory steps uncompleted.")
+            
+
+    def action_fsm_validate(self, stop_running_timers=False):
+        """ If All product are delivered, if the Worksheet is completed, At least one timesheet entry is recorded for the task and user has privileges :
+           Task can be mark as done.
+        """
+        user = self.env.user
+        if not user.has_group('gse_access_rights.group_stock_validator'):
+            raise AccessError("You don't have permission to perform this action. Kindly contact your administrator.")
+        
+        if not self.is_task_done():
+            error_message = (
+                "Access Error: Mandatory Steps Uncompleted.\n"
+                "-----------------------------------------\n"
+                "- Some products still need to be delivered.\n"
+                "- The timesheets aren't completed."
+            )
+            raise AccessError(error_message)
+
+        return super().action_fsm_validate(stop_running_timers)
+    
+    def is_task_done(self):
+        for record in self:
+            if record.sale_order_id:
+                is_done = bool(record.timesheet_ids) and record.sale_order_id.delivery_status in ['full', False]
+            else:
+                is_done = False
+        return is_done
+
+    
