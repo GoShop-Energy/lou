@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_invoice_document_custom_message" inherit_id="account.report_invoice_document">
+        <xpath expr="//p[@name='payment_communication']/following-sibling::div[position()=2]" position="after">
+            <t t-if="o.use_custom_msg and o.company_id.use_custom_msg">
+                <div t-if="not is_html_empty(o.company_id.custom_invoice_message)" name="use_custom_msg" class="row mt-3 col-6 border border-light-subtle p-2">
+                    <span t-field="o.company_id.custom_invoice_message" style="font-size:10px;" />
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>
