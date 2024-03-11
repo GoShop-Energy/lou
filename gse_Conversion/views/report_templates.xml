@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <data>
+        <template id="report_saleorder_document_customer" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//div[@name='so_total_summary']//table" position="inside">
+             <t t-if="doc.is_same_curr == False">
+
+                <td><strong>Amount in Company Currencydcvwsrfvw</strong></td>
+                <td class="text-end">
+                        <span t-field="doc.company_currency_amount"/>
+                </td>
+                  <td><strong>Exchange Rate</strong></td>
+                <td class="text-end">
+                        <span t-field="doc.exchange_rate"/>
+                </td>
+             </t>
+            </xpath>
+        </template>
+    </data>
+</odoo>
