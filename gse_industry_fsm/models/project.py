@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
-
+from odoo.exceptions import AccessError
 
 class ProjectTask(models.Model):
     _inherit = "project.task"
@@ -59,3 +59,39 @@ class ProjectTask(models.Model):
     def onchange_partner_service_id(self):
         for task in self:
             task.partner_service_id = task.partner_id.address_get(['field_service'])['field_service'] if task.partner_id else False
+
+    @api.onchange("stage_id")
+    def onchange_stage_id(self):
+        if self.stage_id and self.stage_id.name == 'Done':
+            user = self.env.user
+            if not user.has_group('gse_access_rights.group_stock_validator'):
+                raise AccessError("You don't have permission to perform this action.")
+            
+            if not self.is_task_done():
+                raise AccessError("Mandory steps uncompleted.")
+            
+
+    def action_fsm_validate(self, stop_running_timers=False):
+        """ If allow billable on task, timesheet product set on project and user has privileges :
+            Create SO confirmed with time and material.
+        """
+        res = super().action_fsm_validate(stop_running_timers)
+        user = self.env.user
+        if not user.has_group('gse_access_rights.group_stock_validator'):
+            raise AccessError("You don't have permission to perform this action. Kindly contact your administrator.")
+        
+        if not self.is_task_done():
+            raise AccessError("Mandory steps uncompleted.")
+
+        return res
+    
+    def is_task_done(self):
+        for record in self:
+            is_done = False
+            if bool(record.timesheet_ids) and record.sale_order_id.delivery_status in ['full', False]:
+                is_done = True
+            else:
+                is_done = False
+        return is_done
+
+    
