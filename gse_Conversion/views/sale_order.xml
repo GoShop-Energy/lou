@@ -14,7 +14,7 @@
                    attrs="{'invisible': [('is_same_curr', '=', True)]}"/>
 
                  <field name="company_currency_id" invisible="1" />
-                <field name="exchange_rate"  attrs="{'invisible': [('is_same_curr', '=', True)]}"/>
+                <field name="exchange_rate"  attrs="{'invisible': [('is_same_curr', '=', True)]}" readonly="1"/>
             </xpath>
         </field>
     </record>

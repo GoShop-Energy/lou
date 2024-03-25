@@ -2,8 +2,8 @@
 
 from odoo import models, fields, api
 
-class SaleOrder(models.Model):
-    _inherit = 'sale.order'
+class AccountMove(models.Model):
+    _inherit = 'account.move'
 
     company_currency_amount = fields.Monetary(string='Amount in Company Currency',compute='_compute_company_currency_amount', 
         currency_field='company_currency_id',)
@@ -16,7 +16,6 @@ class SaleOrder(models.Model):
     @api.depends('currency_id', 'company_id.currency_id', 'amount_total', 'exchange_rate' )
     def _compute_company_currency_amount(self):
         for order in self:
-            print('------', order.exchange_rate)
             if  order.currency_id != order.company_id.currency_id:
                 order.company_currency_amount = order.amount_total * order.exchange_rate 
                 
@@ -35,10 +34,8 @@ class SaleOrder(models.Model):
             if order.state != "sale":
                 order.exchange_rate = rate_price_list
                 order.exchange_rate_store = rate_price_list
-                print('kkkkkkkkkk', order.exchange_rate)
             else:
                 order.exchange_rate = order.exchange_rate_store
-                print('lllllll', order.exchange_rate)
 
 
     

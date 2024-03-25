@@ -24,9 +24,11 @@
         "stock_enterprise",
         "mrp",
         "sale",
+        "account",
     ],
     "data": [ 
         "views/sale_order.xml",
+        "views/account_move.xml",
         "views/report_templates.xml",
     ],
     "images": [ ],
