@@ -51,6 +51,6 @@ class SaleOrder(models.Model):
     @api.depends('partner_service_id','partner_id')
     def _compute_partner_service_id(self):
         for order in self:
-            if order.partner_service_id:
+            if order.partner_service_id.id == order.partner_id.id or order.partner_service_id.id in order.partner_id.child_ids.ids:
                 return
             order.partner_service_id = order.partner_id.address_get(['field_service'])['field_service'] if order.partner_id else False
