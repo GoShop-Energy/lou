@@ -35,6 +35,5 @@
     ],
     "images": [
         "static/src/img/location.png",
-    ],
-    "assets": {"web.assets_backend": []},
+    ]
 }
