@@ -21,7 +21,6 @@ class ProjectTask(models.Model):
 
     delivery_count = fields.Integer(related="sale_order_id.delivery_count")
     picking_ids = fields.One2many(related="sale_order_id.picking_ids")
-    partner_id = fields.Many2one(related="sale_order_id.partner_id")
     partner_service_id = fields.Many2one("res.partner", string="Service Location" , readonly=False)
 
     def action_view_delivery(self):
