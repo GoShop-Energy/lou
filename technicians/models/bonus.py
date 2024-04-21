@@ -25,10 +25,10 @@ class Bonus(models.Model):
 
     vendor_bill_move_ids = fields.Many2many(
         'account.move', compute='_compute_vendor_bill_move_ids',
-        help="Vendor bill but also Vendor bill credit note")
+        help="Vendor bill but also Vendor bill credit note", store=True)
+    vendor_bill_move_date = fields.Datetime("Date", compute='_compute_vendor_bill_move_ids', store=True)
     vendor_bill_move_count = fields.Integer(string='# Invoices', compute='_compute_vendor_bill_move_count', groups="account.group_account_manager")
     vendor_bill_move_line_ids = fields.Many2many('account.move.line', ondelete='restrict')
-    vendor_bill_move_date = fields.Datetime("Date", compute='_compute_vendor_bill_move_ids', compute_sudo=False, store=True)
 
     @api.depends('vendor_bill_move_ids')
     def _compute_vendor_bill_move_count(self):

@@ -82,6 +82,7 @@
                     <filter name="group_user" string="User" domain="[]" context="{'group_by': 'employee_id'}"/>
                     <filter name="group_order" string="Order" domain="[]" context="{'group_by': 'order_id'}"/>
                     <filter name="group_move_date" string="Date" domain="[]" context="{'group_by': 'vendor_bill_move_date'}"/>
+                    <filter name="group_move_ids" string="Vendor Bill" domain="[]" context="{'group_by': 'vendor_bill_move_ids'}"/>
                 </group>
             </search>
         </field>
