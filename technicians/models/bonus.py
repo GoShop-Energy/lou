@@ -28,6 +28,7 @@ class Bonus(models.Model):
         help="Vendor bill but also Vendor bill credit note")
     vendor_bill_move_count = fields.Integer(string='# Invoices', compute='_compute_vendor_bill_move_count', groups="account.group_account_manager")
     vendor_bill_move_line_ids = fields.Many2many('account.move.line', ondelete='restrict')
+    vendor_bill_move_date = fields.Datetime("Date", compute='_compute_vendor_bill_move_ids', compute_sudo=False, store=True)
 
     @api.depends('vendor_bill_move_ids')
     def _compute_vendor_bill_move_count(self):
@@ -37,7 +38,14 @@ class Bonus(models.Model):
     @api.depends('vendor_bill_move_line_ids')
     def _compute_vendor_bill_move_ids(self):
         for bonus in self:
-            bonus.vendor_bill_move_ids = bonus.vendor_bill_move_line_ids.move_id
+            # compute moves
+            move_ids = bonus.vendor_bill_move_line_ids.move_id
+            bonus.vendor_bill_move_ids = move_ids
+            # compute date
+            move_date = False
+            if move_ids:
+                move_date = move_ids[0].create_date
+            bonus.vendor_bill_move_date = move_date
 
     @api.model_create_multi
     def create(self, vals_list):
