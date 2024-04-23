@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<odoo>
+    <record id="gse_user_form" model="ir.ui.view">
+        <field name="name">gse.user.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="priority">16</field>
+        <field name="arch" type="xml">
+            <xpath expr="//form//group" position="inside">
+                <field name="job_id" />
+            </xpath>
+        </field>
+    </record> 
+
+    <record id="gse_user_tree" model="ir.ui.view">
+        <field name="name">gse.user.tree</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_tree"/>
+        <field name="priority">16</field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="job_id" />
+             </xpath>
+        </field>
+    </record> 
+</odoo>
