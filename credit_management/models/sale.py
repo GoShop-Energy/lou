@@ -219,10 +219,10 @@ class SaleOrder(models.Model):
             .filtered(lambda x: x.is_downpayment)
             .invoice_lines.mapped("move_id")
             .filtered(lambda x: x.move_type in ["out_invoice"])
-        )
+        ).sudo()  # To get data from invoice
         downpayment_amount = self.get_invoice_total_amount(downpayment_invoices)
         invoice_amount = self.get_invoice_total_amount(
-            self.invoice_ids.filtered(lambda x: x.move_type in ["out_invoice"])
+            self.invoice_ids.filtered(lambda x: x.move_type in ["out_invoice"]).sudo()  # To get data from invoice
         )
         if (
             invoice_amount >= self.amount_total
@@ -231,11 +231,11 @@ class SaleOrder(models.Model):
             return True
         else:
             return False
-
+    
     @api.model
     def get_invoice_total_amount(self, invoices):
         total_amount = 0.0
-        for invoice in invoices:
+        for invoice in invoices.sudo():
             invoice_partials = invoice._get_reconciled_invoices_partials()
             for invoice_partial in invoice_partials:
                 for (
@@ -243,17 +243,20 @@ class SaleOrder(models.Model):
                     _amount,
                     counterpart_line,
                 ) in invoice_partial:
-                    if (
-                        counterpart_line.payment_id.payment_method_id.code
-                        == "batch_payment"
-                        and invoice.payment_state in ["in_payment", "paid"]
-                        and counterpart_line.payment_id.is_matched
-                    ):
-                        total_amount += counterpart_line.payment_id.amount
-                    elif (
-                        counterpart_line.payment_id.payment_method_id.code
-                        != "batch_payment"
-                        and invoice.payment_state in ["in_payment", "paid"]
-                    ):
-                        total_amount += counterpart_line.payment_id.amount
+                    # Make sure that each counterpart_line is a recordset before applying sudo().
+                    if isinstance(counterpart_line, models.Model):
+                        counterpart_line = counterpart_line.sudo()
+                        if (
+                            counterpart_line.payment_id.payment_method_id.code
+                            == "batch_payment"
+                            and invoice.payment_state in ["in_payment", "paid"]
+                            and counterpart_line.payment_id.is_matched
+                        ):
+                            total_amount += counterpart_line.payment_id.amount
+                        elif (
+                            counterpart_line.payment_id.payment_method_id.code
+                            != "batch_payment"
+                            and invoice.payment_state in ["in_payment", "paid"]
+                        ):
+                            total_amount += counterpart_line.payment_id.amount
         return total_amount
