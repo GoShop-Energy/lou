@@ -17,3 +17,4 @@ class AccountMove(models.Model):
         if self.company_id.use_custom_msg and self.company_id.use_custom_msg and self.use_custom_msg and gse_template: 
             return next(iter(gse_template.get_external_id().values()), None)
         return res
+    # ...
