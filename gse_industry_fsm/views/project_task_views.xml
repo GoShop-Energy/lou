@@ -25,11 +25,18 @@
                         modifiers="{&quot;required&quot;: [[&quot;is_fsm&quot;, &quot;=&quot;, true]]}"
                         can_create="true"
                         can_write="true"
-                        />  
+                        attrs="{'readonly': [('can_edit_form', '=', False)]}"
+                        /> 
+                    <field name="can_edit_form" invisible="1" />
                 </xpath>
 
                 <xpath expr="//form//group//field[@name='partner_id']" position="replace">
-                    <field name="partner_id" widget="res_partner_many2one" class="o_task_customer_field"/>  
+                    <field 
+                        name="partner_id" 
+                        widget="res_partner_many2one" 
+                        class="o_task_customer_field"
+                        attrs="{'readonly': [('can_edit_form', '=', False)]}"
+                    />  
                 </xpath>
 
                 <xpath expr="//label[@for='action_fsm_navigate']" position="replace">
@@ -51,6 +58,48 @@
                         attrs="{'invisible': [('delivery_count', '=', 0)]}" groups="stock.group_stock_user">
                         <field name="delivery_count" widget="statinfo" string="Delivery"/>
                     </button>
+                </xpath>
+
+                <xpath expr="//field[@name='project_id']" position="attributes">
+                     <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath>
+                
+                <!-- <xpath expr="//field[@name='name']" position="attributes">
+                     <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath> -->
+
+                <xpath expr="//field[@name='worksheet_template_id']" position="attributes">
+                     <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='user_ids']" position="attributes">
+                     <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_phone']" position="attributes">
+                     <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath>
+                
+                <xpath expr="//field[@name='tag_ids']" position="attributes">
+                     <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath>  
+
+                <xpath expr="//field[@name='planned_date_begin']" position="attributes">
+                     <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath>  
+            </field>
+        </record>
+
+        <record id="gse_view_task_form2_inherit_sale_timesheet" model="ir.ui.view">
+            <field name="name">gse.view.task.form2.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="sale_project.view_sale_project_inherit_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sale_line_id'][1]" position="attributes">
+                   <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='sale_line_id'][2]" position="attributes">
+                   <attribute name="attrs">{'readonly': [('can_edit_form', '=', False)]}</attribute>
                 </xpath>
             </field>
         </record>
