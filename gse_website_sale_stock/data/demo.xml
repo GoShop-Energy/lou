@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data noupdate="1">
+
+    <record id="product_delivery_01" model="product.product">
+        <field name="name">STOCK DEMO</field>
+        <field name="standard_price">55.0</field>
+        <field name="list_price">70.0</field>
+        <field name="detailed_type">product</field>
+        <field name="is_published">True</field>
+        <field name="allow_out_of_stock_order">False</field>
+        <field name="show_availability">True</field>
+        <field name="available_threshold">999</field>
+    </record>
+
+    <record id="website.default_website" model="website">
+        <field name="domain">http://127.0.0.1:8069/</field>
+    </record>
+    <record id="website.website2" model="website">
+        <field name="domain">http://127.0.0.2:8069/</field>
+        <field name="company_id" ref="stock.res_company_1"/>
+    </record>
+
+    <!-- Warehouses -->
+    <record id="warehouse0" model="stock.warehouse">
+        <field name="name">Company1WH2</field>
+        <field name="code">Company1WH2</field>
+    </record>
+
+    <!-- Inventory Stock -->
+    <record id="stock_inventory_1" model="stock.quant">
+        <field name="product_id" ref="gse_website_sale_stock.product_delivery_01"/>
+        <field name="inventory_quantity">10.0</field>
+        <field name="location_id" model="stock.location" eval="obj().env.ref('stock.warehouse0').lot_stock_id.id"/>
+    </record>
+    <record id="stock_inventory_2" model="stock.quant">
+        <field name="product_id" ref="gse_website_sale_stock.product_delivery_01"/>
+        <field name="inventory_quantity">5.0</field>
+        <field name="location_id" model="stock.location" eval="obj().env.ref('gse_website_sale_stock.warehouse0').lot_stock_id.id"/>
+    </record>
+    <record id="stock_inventory_3" model="stock.quant">
+        <field name="product_id" ref="gse_website_sale_stock.product_delivery_01"/>
+        <field name="inventory_quantity">22.0</field>
+        <field name="location_id" model="stock.location" eval="obj().env.ref('stock.stock_warehouse_shop0').lot_stock_id.id"/>
+    </record>
+    <function model="stock.quant" name="action_apply_inventory">
+        <function eval="[[('id', 'in', (ref('stock_inventory_1'),
+                                        ref('stock_inventory_2'),
+                                        ref('stock_inventory_3'),
+                                        ))]]" model="stock.quant" name="search"/>
+    </function>
+
+</data>
+</odoo>
