@@ -13,9 +13,10 @@
     "license": "LGPL-3",
     "depends": [
         "partner_commission",
+        "gse_custo",
     ],
     "data": [
-        
+        "views/account_move.xml"
     ],
     
 }

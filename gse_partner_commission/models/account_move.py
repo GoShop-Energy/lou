@@ -1,10 +1,34 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, _
+from odoo import api, fields, models, _
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    purchase_order_count = fields.Integer(
+        string='Purchase Orders',
+        compute='_compute_purchase_order_count'
+    )
+
+    @api.depends('commission_po_line_id')
+    def _compute_purchase_order_count(self):
+        for move in self:
+            purchase_orders = self.env['purchase.order'].search([('id', '=', move.commission_po_line_id.order_id.id)])
+            move.purchase_order_count = len(purchase_orders)
+
+    def action_view_purchase_orders(self):
+        self.ensure_one()
+        purchase_orders = self.commission_po_line_id.mapped('order_id')
+        result = self.env.ref('purchase.purchase_rfq').read()[0]
+        if len(purchase_orders) > 1:
+            result['domain'] = [('id', 'in', purchase_orders.ids)]
+        elif len(purchase_orders) == 1:
+            result['views'] = [(self.env.ref('purchase.purchase_order_form', False).id, 'form')]
+            result['res_id'] = purchase_orders.id
+        else:
+            result = {'type': 'ir.actions.act_window_close'}
+        return result
+    
     def button_cancel(self):
         res = super(AccountMove, self).button_cancel()
         self._cancel_commission()
