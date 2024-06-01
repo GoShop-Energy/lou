@@ -22,6 +22,7 @@ class ProjectTask(models.Model):
     delivery_count = fields.Integer(related="sale_order_id.delivery_count")
     picking_ids = fields.One2many(related="sale_order_id.picking_ids")
     partner_service_id = fields.Many2one("res.partner", string="Service Location" , readonly=False)
+    can_edit_form = fields.Boolean(string="Can Edit Form", compute="_compute_can_edit_form")
 
     def action_view_delivery(self):
         return self._get_action_view_picking(self.picking_ids)
@@ -58,3 +59,11 @@ class ProjectTask(models.Model):
     def onchange_partner_service_id(self):
         for task in self:
             task.partner_service_id = task.partner_id.address_get(['field_service'])['field_service'] if task.partner_id else False
+
+
+    def _compute_can_edit_form(self):
+        for task in self:
+            if self.env.user.user_has_groups("gse_access_rights.group_fsm_planner") or self.env.user.user_has_groups("industry_fsm.group_fsm_manager"):
+                task.can_edit_form = True
+            else:
+                task.can_edit_form = False
