@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="purchase.purchase_report_view_tree" model="ir.ui.view">
+        <field name="name">purchase.report.view.tree</field>
+        <field name="model">purchase.report</field>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="inside">
+                <field name="price_unit" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
