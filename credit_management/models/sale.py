@@ -1,5 +1,8 @@
 # Copyright 2020-2022 Sodexis
 # License OPL-1 (See LICENSE file for full copyright and licensing details).
+import logging
+
+_logger = logging.getLogger(__name__)
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -231,32 +234,36 @@ class SaleOrder(models.Model):
             return True
         else:
             return False
-    
-    @api.model
+   
     def get_invoice_total_amount(self, invoices):
         total_amount = 0.0
         for invoice in invoices.sudo():
             invoice_partials = invoice._get_reconciled_invoices_partials()
             for invoice_partial in invoice_partials:
-                for (
-                    _partial,
-                    _amount,
-                    counterpart_line,
-                ) in invoice_partial:
-                    # Make sure that each counterpart_line is a recordset before applying sudo().
-                    if isinstance(counterpart_line, models.Model):
-                        counterpart_line = counterpart_line.sudo()
-                        if (
-                            counterpart_line.payment_id.payment_method_id.code
-                            == "batch_payment"
-                            and invoice.payment_state in ["in_payment", "paid"]
-                            and counterpart_line.payment_id.is_matched
-                        ):
-                            total_amount += counterpart_line.payment_id.amount
-                        elif (
-                            counterpart_line.payment_id.payment_method_id.code
-                            != "batch_payment"
-                            and invoice.payment_state in ["in_payment", "paid"]
-                        ):
-                            total_amount += counterpart_line.payment_id.amount
+                # Check if invoice_partial is iterable
+                if isinstance(invoice_partial, (list, tuple)):
+                    for partial in invoice_partial:
+                        # Ensure each item in invoice_partial is a tuple of length 3
+                        if isinstance(partial, (list, tuple)) and len(partial) == 3:
+                            _partial, _amount, counterpart_line = partial
+                            # Make sure that each counterpart_line is a recordset before applying sudo().
+                            if isinstance(counterpart_line, models.Model):
+                                counterpart_line = counterpart_line.sudo()
+                                if (
+                                    counterpart_line.payment_id.payment_method_id.code
+                                    == "batch_payment"
+                                    and invoice.payment_state in ["in_payment", "paid"]
+                                    and counterpart_line.payment_id.is_matched
+                                ):
+                                    total_amount += counterpart_line.payment_id.amount
+                                elif (
+                                    counterpart_line.payment_id.payment_method_id.code
+                                    != "batch_payment"
+                                    and invoice.payment_state in ["in_payment", "paid"]
+                                ):
+                                    total_amount += counterpart_line.payment_id.amount
+                        else:
+                            _logger.error(f"Expected tuple of length 3, got: {partial}")
+                else:
+                    _logger.error(f"Expected iterable, got: {invoice_partial}")
         return total_amount
