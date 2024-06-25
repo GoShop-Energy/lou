@@ -25,7 +25,7 @@
         "sale_project_stock",
         "sale_timesheet", 
         "sale_timesheet_enterprise",
-        "stock",
+        "stock", 
     ],
     "data": [
         "views/res_partner_views.xml",
