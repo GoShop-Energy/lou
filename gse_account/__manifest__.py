@@ -9,7 +9,7 @@
     "author": "Benjamin Kisenge",
     "website": "https://dev--glowing-faun-e9789d.netlify.app",
     "category": "Customizations",
-    "version": "0.1.8.7",
+    'version': '17.0.1.0.0',
     "license": "LGPL-3",
     "depends": [
         "base",
