@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="view_tax_journal_form" model="ir.ui.view">
+                <field name="name">account.tax.journal.form</field>
+                <field name="inherit_id" ref="account.view_tax_form" />
+                <field name="priority">99</field>
+                <field name="model">account.tax</field>
+                <field name="arch" type="xml">
+                    <xpath expr="//form//sheet//group//group//field[@name='active']" position="after">
+                        <field name="allowed_journal" widget="many2many_tags"/>
+                    </xpath>
+                </field>
+    </record>
+</odoo>
