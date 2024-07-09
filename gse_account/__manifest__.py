@@ -16,8 +16,10 @@
         "account",
     ],
     "data": [
-        "views/res_config_settings_views.xml",
+        "views/account_journal.xml",
+        "views/account_tax.xml",
         "views/account_views.xml",
+        "views/res_config_settings_views.xml",
         "reports/account_report_views.xml",
     ],
 }
