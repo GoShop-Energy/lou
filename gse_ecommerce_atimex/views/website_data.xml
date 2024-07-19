@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>   
+   <record id="menu_accueil" model="website.menu">
+            <field name="name">ACCUEIL</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+    <record id="menu_shop" model="website.menu">
+            <field name="name">SHOP</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+    <record id="menu_blogs" model="website.menu">
+            <field name="name">BLOGS</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+    <record id="menu_livraison" model="website.menu">
+            <field name="name">LIVRAISON</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+    <record id="menu_propos" model="website.menu">
+            <field name="name">A PROPOS</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+    <record id="menu_fiches" model="website.menu">
+            <field name="name">FICHES TECHNIQUES</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+    <record id="menu_ventes" model="website.menu">
+            <field name="name">CONDITIONS DE VENTES</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+    <record id="menu_contactus" model="website.menu">
+            <field name="name">CONTACTEZ-NOUS</field>
+            <field name="url">/contactus</field>
+            <field name="page_id" ref="website.contactus_page"/>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+    </record>
+</odoo>
