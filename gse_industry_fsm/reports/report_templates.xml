@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="custom_external_layout_boxed" inherit_id="web.external_layout_boxed">
+        <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="inside">
+            <t t-if="doc">
+                <t t-if="doc._name == 'sale.order'">
+                    <div>
+                        <span><t t-esc="doc.name"/></span>
+                    </div>
+                </t>
+            </t>
+            <t t-if="o">
+                <t t-if="o._name == 'purchase.order'">
+                    <div>
+                        <span><t t-esc="o.name"/></span>
+                    </div>
+                </t>
+            </t>
+            <t t-if="o">
+                <t t-if="o._name == 'stock.picking'">
+                    <div>
+                        <span><t t-esc="o.name"/></span>
+                    </div>
+                </t>
+            </t>
+            <t t-if="o">
+                <t t-if="o._name == 'account.move' and o.move_type in ('out_invoice', 'out_refund')">
+                    <div>
+                        <span><t t-esc="o.name"/></span>
+                    </div>
+                </t>
+            </t>
+            <t t-if="not doc and not o">
+                <div style="display: none;">
+                </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>
