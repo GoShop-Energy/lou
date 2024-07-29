@@ -26,14 +26,12 @@
         "sale_timesheet", 
         "sale_timesheet_enterprise",
         "stock",
-        "web"
     ],
     "data": [
         "views/res_partner_views.xml",
         "views/sale_order_views.xml",
         "views/project_task_views.xml",
         "reports/project_report_views.xml",
-        "reports/report_templates.xml",
     ],
     "images": [
         "static/src/img/location.png",
