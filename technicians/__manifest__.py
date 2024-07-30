@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 {
-    'name': 'Transport Bonuses GSE',
-    'author': "Sébastien Bühl, Shortcut1337",
-    'website': "http://www.goshop.energy",
-    'version': '0.1',
-    'category': 'Hidden',
-    'license': 'LGPL-3',
-    'summary': 'Transport Expenses for Technicians and Project Manager',
-    'description': """
+    "name": "Transport Bonuses GSE",
+    "author": "Sébastien Bühl, Shortcut1337",
+    "website": "http://www.goshop.energy",
+    "version": "17.0.1.0",
+    "category": "Hidden",
+    "license": "LGPL-3",
+    "summary": "Transport Expenses for Technicians and Project Manager",
+    "description": """
 Compute automatically the transport expenses for the technicians and project manager.
 
 When a SO has a SOL related to a task (the SOL.task_id field should
@@ -67,26 +67,26 @@ with a 50% rate = 30/50th of 50% of 100$ = 30$ commission
 - Tech 2 worked 20h (out of 50) on Installation labor task (100$) with
 a 50% rate = 20/50th of 50% of 100$ = 20$ commission
     """,
-    'depends': [
-        'hr_contract',
-        'industry_fsm',
-        'sale_project',
-        'sale_stock',
-        'sale_timesheet',  # should be auto-installed as `industry_fsm` depends from `hr_timesheet`, but still..
+    "depends": [
+        "hr_contract",
+        "industry_fsm",
+        "sale_project",
+        "sale_stock",
+        "sale_timesheet",  # should be auto-installed as `industry_fsm` depends from `hr_timesheet`, but still..
     ],
-    'demo': [
-        'data/demo.xml',
+    "demo": [
+        "data/demo.xml",
     ],
-    'data': [
-        'security/security.xml',
-        'security/ir.model.access.csv',
-        'views/account_views.xml',
-        'views/bonus_views.xml',
-        'views/hr_views.xml',
-        'views/product_views.xml',
-        'views/project_views.xml',
-        'views/res_config_settings_views.xml',
-        'views/sale_order_views.xml',
+    "data": [
+        "security/security.xml",
+        "security/ir.model.access.csv",
+        "views/account_views.xml",
+        "views/bonus_views.xml",
+        "views/hr_views.xml",
+        "views/product_views.xml",
+        "views/project_views.xml",
+        "views/res_config_settings_views.xml",
+        "views/sale_order_views.xml",
     ],
-    'installable': True,
+    "installable": True,
 }
