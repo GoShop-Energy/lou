@@ -1,0 +1,60 @@
+<odoo>
+    <record id="cloud_storage_config_settings_view_form" model="ir.ui.view">
+        <field name="name">cloud_storage_config_settings_view_form</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="70"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Cloud Storage" string="Cloud Storage">
+                    <h2>Cloud Storage</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-12 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="cloud_storage"/>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="cloud_storage"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_setting_right_pane" attrs="{'invisible': [('cloud_storage', '!=', 'azure')]}">
+                                <label for="azure_container_name"/>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="azure_container_name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_setting_right_pane" attrs="{'invisible': [('cloud_storage', '!=', 'azure')]}">
+                                <label for="azure_connect_str"/>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="azure_connect_str"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_setting_right_pane" attrs="{'invisible': [('cloud_storage', '!=', 'google')]}">
+                                <label for="google_cloud_bucket_name"/>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="google_cloud_bucket_name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="o_setting_right_pane" attrs="{'invisible': [('cloud_storage', '!=', 'google')]}">
+                                <label for="google_cloud_account_info"/>
+                                <div class="content-group">
+                                    <div class="mt16">
+                                        <field name="google_cloud_account_info"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
