@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Sodexis
+# Copyright 2020-2023 Sodexis
 # License OPL-1 (See LICENSE file for full copyright and licensing details).
 
 {
@@ -7,7 +7,7 @@
         Credit management options with Partner Credit Hold/Credit Limit""",
     "author": "Sodexis",
     "website": "https://sodexis.com/",
-    "version": "17.0.3.0.1",
+    "version": "17.0.1.0.1",
     "installable": True,
     "license": "OPL-1",
     "depends": [
@@ -30,7 +30,8 @@
         "views/account_payment_term_view.xml",
         "views/res_company_views.xml",
     ],
-    "images": ["images/main_screenshot.jpg"],
+    "images": ["images/main_screenshot.png"],
+    "live_test_url": "https://sodexis.com/odoo-apps-store-demo",
     "price": "99.99",
     "currency": "USD",
 }

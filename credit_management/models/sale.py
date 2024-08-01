@@ -1,8 +1,5 @@
-# Copyright 2020-2022 Sodexis
+# Copyright 2020-2023 Sodexis
 # License OPL-1 (See LICENSE file for full copyright and licensing details).
-import logging
-
-_logger = logging.getLogger(__name__)
 
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
@@ -42,9 +39,6 @@ class SaleOrder(models.Model):
         help="If True, then holds the DO until  \
             invoices are paid and equals to the total amount on the SO",
     )
-    partner_credit_warning_msg = fields.Text(
-        compute="_compute_partner_credit_warning_msg"
-    )
 
     @api.onchange("partner_id", "payment_term_id")
     def onchange_for_hold_delivery_till_payment(self):
@@ -64,22 +58,18 @@ class SaleOrder(models.Model):
                     self.partner_id.commercial_partner_id.hold_delivery_till_payment
                 )
         except Exception as e:
-            self.partner_credit_warning_msg = e.name
-
-    @api.depends("amount_total")
-    def _compute_partner_credit_warning_msg(self):
-        for order in self:
-            order.partner_credit_warning_msg = ""
-            show_warning = order.state in ("draft", "sent")
-            if show_warning:
-                try:
-                    if order.partner_id:
-                        order.check_partner_credit_limit()
-                        order.hold_delivery_till_payment = (
-                            order.partner_id.commercial_partner_id.hold_delivery_till_payment
-                        )
-                except Exception as e:
-                    order.partner_credit_warning_msg = e.name
+            partner = self.partner_id.commercial_partner_id
+            if (
+                not partner.credit_hold
+                and partner.override_credit_threshold_limit >= self.amount_total
+            ):
+                return
+            return {
+                "warning": {
+                    "title": _("Warning!"),
+                    "message": exception_to_unicode(e),
+                }
+            }
 
     def check_credit_limit(self, partner, prepayment_test):
         sale = self
@@ -105,10 +95,10 @@ class SaleOrder(models.Model):
             ):
                 raise UserError(
                     _(
-                        "Over Credit Limit!"
-                        "\n\nCredit Limit: %(symbol)s%(credit_limit)s"
-                        "\nTotal Credit Balance: %(symbol)s%(total_credit_used)s"
-                        "\nTotal this order: %(symbol)s%(amount_total)s"
+                        """Over Credit Limit!\n
+                        Credit Limit: %(symbol)s%(credit_limit)s\n
+                        Total Credit Balance: %(symbol)s%(total_credit_used)s\n
+                        Total this order: %(symbol)s%(amount_total)s"""
                     )
                     % {
                         "symbol": sale.currency_id.symbol,
@@ -221,11 +211,11 @@ class SaleOrder(models.Model):
             self.mapped("order_line")
             .filtered(lambda x: x.is_downpayment)
             .invoice_lines.mapped("move_id")
-            .filtered(lambda x: x.move_type in ["out_invoice"])
-        ).sudo()  # To get data from invoice
+            .filtered(lambda x: x.move_type == "out_invoice")
+        )
         downpayment_amount = self.get_invoice_total_amount(downpayment_invoices)
         invoice_amount = self.get_invoice_total_amount(
-            self.invoice_ids.filtered(lambda x: x.move_type in ["out_invoice"]).sudo()  # To get data from invoice
+            self.invoice_ids.filtered(lambda x: x.move_type == "out_invoice")
         )
         if (
             invoice_amount >= self.amount_total
@@ -234,36 +224,28 @@ class SaleOrder(models.Model):
             return True
         else:
             return False
-   
+
+    @api.model
     def get_invoice_total_amount(self, invoices):
         total_amount = 0.0
-        for invoice in invoices.sudo():
-            invoice_partials = invoice._get_reconciled_invoices_partials()
+        for invoice in invoices:
+            (
+                invoice_partials,
+                exchange_diff_moves,
+            ) = invoice._get_reconciled_invoices_partials()
             for invoice_partial in invoice_partials:
-                # Check if invoice_partial is iterable
-                if isinstance(invoice_partial, (list, tuple)):
-                    for partial in invoice_partial:
-                        # Ensure each item in invoice_partial is a tuple of length 3
-                        if isinstance(partial, (list, tuple)) and len(partial) == 3:
-                            _partial, _amount, counterpart_line = partial
-                            # Make sure that each counterpart_line is a recordset before applying sudo().
-                            if isinstance(counterpart_line, models.Model):
-                                counterpart_line = counterpart_line.sudo()
-                                if (
-                                    counterpart_line.payment_id.payment_method_id.code
-                                    == "batch_payment"
-                                    and invoice.payment_state in ["in_payment", "paid"]
-                                    and counterpart_line.payment_id.is_matched
-                                ):
-                                    total_amount += counterpart_line.payment_id.amount
-                                elif (
-                                    counterpart_line.payment_id.payment_method_id.code
-                                    != "batch_payment"
-                                    and invoice.payment_state in ["in_payment", "paid"]
-                                ):
-                                    total_amount += counterpart_line.payment_id.amount
-                        else:
-                            _logger.error(f"Expected tuple of length 3, got: {partial}")
-                else:
-                    _logger.error(f"Expected iterable, got: {invoice_partial}")
+                (_partial,_amount,counterpart_line) = invoice_partial
+                if (
+                    counterpart_line.payment_id.payment_method_id.code
+                    == "batch_payment"
+                    and invoice.payment_state in ["in_payment", "paid"]
+                    and counterpart_line.payment_id.is_matched
+                ):
+                    total_amount += counterpart_line.payment_id.amount
+                elif (
+                    counterpart_line.payment_id.payment_method_id.code
+                    != "batch_payment"
+                    and invoice.payment_state in ["in_payment", "paid"]
+                ):
+                    total_amount += counterpart_line.payment_id.amount
         return total_amount
