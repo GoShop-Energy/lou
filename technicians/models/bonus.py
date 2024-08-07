@@ -238,7 +238,7 @@ class Bonus(models.Model):
         if not journal.default_account_id:
             raise UserError("Le journal sélectionné %r pour les bonus n'a pas de `default_account_id`" % journal.name)
 
-        partner_id = self.employee_id.address_home_id.id
+        partner_id = self.employee_id.work_contact_id.id
         if not partner_id:
             raise UserError("L'employé n'a pas d'adresse enregistrée.")
 
