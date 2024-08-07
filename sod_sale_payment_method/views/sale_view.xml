@@ -2,7 +2,7 @@
 <!-- Copyright 2019-2022 Sodexis
      License OPL-1 (See LICENSE file for full copyright and licensing details). -->
 <odoo>
-    <record model="ir.ui.view" id="view_order_form_inherit">
+    <record id="view_order_form_inherit" model="ir.ui.view">
         <field name="name">sale.order.form.inherit</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form" />
