@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <templates>
-    <t t-extend="website_sale_stock.product_availability">
-        <t t-jquery="#threshold_message" t-operation="after">
+    <t t-inherit="website_sale_stock.product_availability" t-inherit-mode="extension">
+        <xpath expr="//div[@id='threshold_message']" position="after">
             <t t-if="show_availability">
                 <br/>
-                <a href="#" class="gse_change_warehouse" t-att-data-gse-wh-qty="JSON.stringify(gse_warehouses_qty_custo)">
+                <a href="#" class="gse_change_warehouse" t-att-data-gse-wh-qty="gse_warehouses_qty_custo">
                     <i class="fa fa-building-o"/> Check quantity in other warehouse
                 </a>
                 <br/>
-                <a href="#" class="gse_change_company" t-att-data-gse-website-companies="JSON.stringify(gse_warehouses_other_companies_qty_custo)">
+                <a href="#" class="gse_change_company" t-att-data-gse-website-companies="gse_warehouses_other_companies_qty_custo">
                     <i class="fa fa-globe"/> Change country
                 </a>
             </t>
-        </t>
+        </xpath>
+    </t>
+
+    <!-- WAREHOUSE -->
+    <t t-name="gse_website_sale_stock.popup_content_warehouse_select_dialog" owl="1">
+        <Dialog size="size" title="title">
+            <t t-call="gse_website_sale_stock.popup_content_warehouse_select">
+                <t t-set="qty" t-value="props.qty"/>
+            </t>
+            <t t-set-slot="footer" owl="1">
+                <button class="btn btn-primary" t-on-click="_onConfirm">Confirm</button>
+                <button class="btn btn-secondary" t-on-click="() => this.props.close()">
+                    Discard
+                </button>
+            </t>
+        </Dialog>
     </t>
 
     <t t-name="gse_website_sale_stock.popup_content_warehouse_select">
         <div>
             <div class="card">
-                <label t-foreach="qty" t-as="wh">
+                <label t-foreach="qty" t-as="wh" t-key="wh.id">
                     <div class="card-body d-flex" style="border-top: 1px solid #dddddd;">
                         <div class="flex-grow-1">
                             <span><b t-esc="wh.name"/></span><br />
@@ -37,10 +52,25 @@
         </div>
     </t>
 
+    <!-- COMPANY -->
+    <t t-name="gse_website_sale_stock.popup_content_company_select_dialog" owl="1">
+        <Dialog size="size" title="title">
+            <t t-call="gse_website_sale_stock.popup_content_company_select">
+                <t t-set="companies" t-value="props.companies"/>
+            </t>
+            <t t-set-slot="footer" owl="1">
+                <button class="btn btn-primary" t-on-click="_onConfirm">Confirm</button>
+                <button class="btn btn-secondary" t-on-click="() => this.props.close()">
+                    Discard
+                </button>
+            </t>
+        </Dialog>
+    </t>
+
     <t t-name="gse_website_sale_stock.popup_content_company_select">
         <div>
             <div class="card">
-                <label t-foreach="companies" t-as="company">
+                <label t-foreach="companies" t-as="company" t-key="company.id">
                     <div class="card-body d-flex" style="border-top: 1px solid #dddddd;">
                         <div class="flex-grow-1">
                             <span><b t-esc="company.name"/></span><br />
