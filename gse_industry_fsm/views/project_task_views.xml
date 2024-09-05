@@ -18,43 +18,26 @@
             </field>
         </record>
 
-        <record id="project_task_view_form_service" model="ir.ui.view">
-            <field name="name">project.task.view.form.service</field>
+        <record id="project_task_view_form_service_inherit" model="ir.ui.view">
+            <field name="name">project.task.view.form.service.inherit</field>
             <field name="model">project.task</field>
             <field name="inherit_id" ref="project.view_task_form2"/>
             <field name="arch" type="xml">
                 <xpath expr="//form//notebook//field[@name='description']" position="replace">
-                    <field name="description" nolabel='1' options="{'collaborative': true, 'resizable': false }" placeholder="Task description..." />
-                    <field name="order_line_table" />
+                    <field name="description" nolabel="1" options="{'collaborative': true, 'resizable': false }" placeholder="Task description..."/>
+                    <field name="order_line_table"/>
                 </xpath>
-                <xpath expr="//form//group//field[@name='project_id']" position="before">
+                <xpath expr="//form//group/group/field[@name='project_id']" position="before">
                     <field name="id" string="Task id"/>
                 </xpath>
-
-                <xpath expr="//form//group//field[@name='partner_id']" position="after">
-                    <field name="partner_service_id"
-                        string="Service Location"
-                        widget="res_partner_many2one"
-                        class="o_task_customer_field"
-                        options="{'always_reload': True}"
-                        context="{'show_address': is_fsm, 'res_partner_search_mode': 'service_location'}"
-                        on_change="1"
-                        modifiers="{&quot;required&quot;: [[&quot;is_fsm&quot;, &quot;=&quot;, true]]}"
-                        can_create="true"
-                        can_write="true"
-                        />
+                <xpath expr="//form//group/group//field[@name='partner_id']" position="after">
+                    <field name="partner_service_id" string="Service Location" widget="res_partner_many2one" class="o_task_customer_field" options="{'always_reload': True}" context="{'show_address': is_fsm, 'res_partner_search_mode': 'service_location'}" on_change="1" modifiers="{&quot;required&quot;: [[&quot;is_fsm&quot;, &quot;=&quot;, true]]}" can_create="true" can_write="true"/>
                 </xpath>
-
-                <xpath expr="//form//group//field[@name='partner_id']" position="replace">
+                <xpath expr="//form//group/group/field[@name='partner_id']" position="replace">
                     <field name="partner_id" widget="res_partner_many2one" class="o_task_customer_field"/>
                 </xpath>
-
-                <xpath expr="//span[@id='start_rating_buttons']" position="before">
-                     <button type="object"
-                        name="action_view_delivery"
-                        class="oe_stat_button"
-                        icon="fa-truck"
-                        invisible="not delivery_count" groups="stock.group_stock_user">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button type="object" name="action_view_delivery" class="oe_stat_button" icon="fa-truck" invisible="not delivery_count" groups="stock.group_stock_user">
                         <field name="delivery_count" widget="statinfo" string="Delivery"/>
                     </button>
                 </xpath>
