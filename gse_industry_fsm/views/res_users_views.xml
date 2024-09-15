@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- user preferences -->
+    <record id="res_users_view_form" model="ir.ui.view">
+        <field name="name">res.users.view.form.inherit.technicians</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="%(industry_fsm.project_task_action_fsm)d" type="action" class="oe_stat_button" icon="fa-tasks"
+                        attrs="{'invisible': [('gse_task_count', '=', 0)]}" groups="project.group_project_user">
+                    <field name="gse_task_count" widget="statinfo" string="Tasks"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
