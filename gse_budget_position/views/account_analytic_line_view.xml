@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit and extend the groupby section in account.analytic.line filter view -->
+    <record id="view_account_analytic_line_filter_inherit_custom" model="ir.ui.view">
+        <field name="name">account.analytic.line.select.inherit.custom</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_line_filter"/>
+        <field name="arch" type="xml">
+            <!-- Insert the general_budget_id filter in the groupby section -->
+            <xpath expr="//group[@name='groupby']" position="inside">
+                <separator/>
+                <!-- Add filter for Budgetary Position -->
+                <filter string="Budgetary Position" name="group_by_budgetary_position" context="{'group_by':'general_budget_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_analytic_line_tree_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.line.tree.inherit</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <!-- Add Budgetary Position (general_budget_id) -->
+                <field name="general_budget_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
