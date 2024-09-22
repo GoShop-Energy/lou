@@ -73,6 +73,13 @@ class CloudStorageAttachment(models.Model):
         except Exception as e:
             _logger.error(str(e))
             return False
+    
+    def _compute_raw(self):
+        res = super()._compute_raw()
+        if self.env.context.get('get_datas', True):
+            for attach in self.filtered(lambda a: not a.raw):
+                attach.raw = attach._get_raw() or b''
+        return res
 
     def _compute_datas(self):
         # use context get_datas = False to prevent fetching from cloud
