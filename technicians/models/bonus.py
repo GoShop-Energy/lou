@@ -186,10 +186,12 @@ class Bonus(models.Model):
                     'order_id': timesheet.order_id.id,
                 })
                 bonus.add_bonus_on_vendor_bill()
-                involved_employees |= timesheet.employee_id
+                involved_employees |= timesheet.employee_id            
 
-            # Safety check
-            assert task_total_hours == total_timesheet_unit_amount, "Total hours spent on task does not match timesheet sum."
+            logger.info("Task total hours: %s, Timesheet total unit amount: %s for Task %s", task_total_hours, total_timesheet_unit_amount, labor_task.name)
+
+            if float_compare(task_total_hours, total_timesheet_unit_amount, precision_digits=precision) != 0:
+                raise UserError("Total hours spent on task does not match timesheet sum (rounded values).")
 
         # Generate bonus for every transport products
         if involved_employees:
