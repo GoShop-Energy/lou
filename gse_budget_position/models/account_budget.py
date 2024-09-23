@@ -8,3 +8,4 @@ class CrossoveredBudgetLines(models.Model):
         'general_budget_id', 
         string="Analytic Lines"
     )
+

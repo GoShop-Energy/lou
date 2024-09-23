@@ -8,5 +8,8 @@ class AccountAnalyticLine(models.Model):
         'crossovered.budget.lines', 
         string='Budgetary Position',
         ondelete='set null',
+        store=True,  # Optional: if you want to store the field in the database
         help="The budgetary position related to this analytic line."
     )
+
+    
