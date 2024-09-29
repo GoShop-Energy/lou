@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_inherit_delivery_metrics" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.delivery.metrics</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='order_details']" position="after">
+                <group string="Delivery Metrics">
+                    <field name="delivery_date_difference"/>
+                    <field name="all_tasks_done_date" />
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+
+
+
