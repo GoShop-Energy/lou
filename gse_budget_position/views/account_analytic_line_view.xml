@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_analytic_line_filter_inherit_custom" model="ir.ui.view">
+        <field name="name">account.analytic.line.select.inherit.custom</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_line_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='groupby']" position="inside">
+                <separator/>
+                <filter string="Budgetary Position" name="group_by_budgetary_position" context="{'group_by':'general_budget_id'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_analytic_line_tree_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.line.tree.inherit</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="general_budget_id" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_account_analytic_line_form_inherit" model="ir.ui.view">
+        <field name="name">account.analytic.line.form.inherit.budget</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="analytic.view_account_analytic_line_form"/>
+        <field name="arch" type="xml">
+            <field name="account_id" position="after">
+                <field name="general_budget_id" string="Budget Position" readonly="0"/>
+            </field>
+        </field>
+    </record>
+</odoo>

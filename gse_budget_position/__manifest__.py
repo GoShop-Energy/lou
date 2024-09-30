@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    "name": "GSE Account",
+    "name": "GSE Budget Position",
     "summary": """
         Customisation of Account module for GoShop Energy""",
     "description": """
@@ -14,10 +14,11 @@
     "depends": [
         "base",
         "account",
+        "account_budget",
+        "analytic"
     ],
     "data": [
-        "views/res_config_settings_views.xml",
-        "views/account_views.xml",
-        "reports/account_report_views.xml",
+        "views/account_analytic_line_view.xml",
+    
     ],
 }
