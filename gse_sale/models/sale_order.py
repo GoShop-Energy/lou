@@ -8,14 +8,13 @@ class SaleOrder(models.Model):
     def action_confirm(self):
         for order in self:
             if self.env.context.get('force_confirm', False):
-                # Proceed with the standard confirmation process
                 return super(SaleOrder, self).action_confirm()
+
             if order.amount_total > 50000:
-                # Vérifier si un produit de type "Project Main d'Oeuvre" est présent
                 has_project_mo_product = any(line.product_id.type == 'service' for line in order.order_line)
                 
                 if not has_project_mo_product:
-                    # Appeler le wizard avec un message et une input
+                    # Trigger the wizard
                     return {
                         'name': 'Montant supérieur à 50k',
                         'type': 'ir.actions.act_window',
@@ -28,8 +27,6 @@ class SaleOrder(models.Model):
                         }
                     }
                 else:
-                    # Validation classique si "Project Main d'Oeuvre" est présent
                     return super(SaleOrder, self).action_confirm()
             else:
-                # Validation classique si le montant est inférieur à 50k
                 return super(SaleOrder, self).action_confirm()

@@ -3,7 +3,7 @@
         <field name="name">warning.wizard.form</field>
         <field name="model">warning.wizard</field>
         <field name="arch" type="xml">
-            <form string="Le montant de votre devis est supérieur à 50k, voulez-vous ajouter une ligne project Main d'oeuvre">
+            <form string="Le montant de votre devis est supérieur à 50k">
                 <group>
                     <field name="confirm" widget="radio"/>
                     <field name="additional_amount" modifiers="{'invisible': [('confirm', '!=', 'yes')]}"/>
@@ -16,3 +16,5 @@
         </field>
     </record>
 </odoo>
+
+
