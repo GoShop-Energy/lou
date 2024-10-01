@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 {
-    "name": "GSE Account",
+    "name": "GSE sale",
     "summary": """
         Customisation of Account module for GoShop Energy""",
     "description": """
@@ -13,11 +13,10 @@
     "license": "LGPL-3",
     "depends": [
         "base",
-        "account",
+        "sale",
     ],
     "data": [
-        "views/res_config_settings_views.xml",
-        "views/account_views.xml",
-        "reports/account_report_views.xml",
+        "views/warning_wizard_view.xml",
+        'security/ir.model.access.csv',
     ],
 }
