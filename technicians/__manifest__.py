@@ -4,7 +4,7 @@
     'name': 'Transport Bonuses GSE',
     'author': "Sébastien Bühl, Shortcut1337",
     'website': "http://www.goshop.energy",
-    'version': '0.1',
+    'version': '17.0.1.0.0',
     'category': 'Hidden',
     'license': 'LGPL-3',
     'summary': 'Transport Expenses for Technicians and Project Manager',
