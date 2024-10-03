@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+     <template id="custom_template_followup_report" inherit_id="account_followup.template_followup_report">
+        <xpath expr="//div[@class='print_only']//h2/strong" position="replace">
+                <strong>
+                 <t t-if="options.get('template_id')">
+                    <t t-esc="options['template_id'].name"/>
+                 </t>
+                </strong>
+        </xpath>
+    </template>
+</odoo>
