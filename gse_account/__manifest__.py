@@ -12,8 +12,10 @@
     "version": "0.1.8.7",
     "license": "LGPL-3",
     "depends": [
-        "base",
         "account",
+        "base",
+        "crm",
+        "sale",
     ],
     "data": [
         "views/res_config_settings_views.xml",
