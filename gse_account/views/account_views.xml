@@ -10,6 +10,9 @@
                 <xpath expr="//page[@id='other_tab']//field[@name='to_check']" position="after"> 
                     <field name="use_custom_msg" />
                 </xpath>
+                <xpath expr="//page[@id='other_tab']//field[@name='delivery_date']" position="after">
+                    <field name="tags_ids" widget="many2many_tags" options="{}"/>
+                </xpath>
             </field>
         </record>
     </data>
