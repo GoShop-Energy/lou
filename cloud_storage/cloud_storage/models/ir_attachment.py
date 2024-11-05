@@ -61,6 +61,7 @@ class CloudStorageAttachment(models.Model):
 
     def _post_add_create(self, **kwargs):
         super()._post_add_create(**kwargs)
+        self.move_to_cloud()
 
     def _get_raw(self):
         self.ensure_one()
