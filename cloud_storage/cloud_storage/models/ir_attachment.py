@@ -59,10 +59,8 @@ class CloudStorageAttachment(models.Model):
             except Exception as e:
                 _logger.error(str(e))
 
-    def _post_add_create(self):
-        # hook after file upload in chatter
-        super()._post_add_create()
-        self.move_to_cloud()
+    def _post_add_create(self, **kwargs):
+        super()._post_add_create(**kwargs)
 
     def _get_raw(self):
         self.ensure_one()
