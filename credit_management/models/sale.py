@@ -207,16 +207,20 @@ class SaleOrder(models.Model):
 
     def check_invoice_fully_paid(self):
         self.ensure_one()
+        # Use sudo to access potentially restricted downpayment invoice lines
         downpayment_invoices = (
-            self.mapped("order_line")
+            self.sudo().mapped("order_line")
             .filtered(lambda x: x.is_downpayment)
-            .invoice_lines.mapped("move_id")
+            .invoice_lines.sudo().mapped("move_id")
             .filtered(lambda x: x.move_type == "out_invoice")
         )
         downpayment_amount = self.get_invoice_total_amount(downpayment_invoices)
+        
+        # Use sudo for invoice_ids only
         invoice_amount = self.get_invoice_total_amount(
-            self.invoice_ids.filtered(lambda x: x.move_type == "out_invoice")
+            self.sudo().invoice_ids.filtered(lambda x: x.move_type == "out_invoice")
         )
+        
         if (
             invoice_amount >= self.amount_total
             or downpayment_amount >= self.amount_untaxed
@@ -228,24 +232,24 @@ class SaleOrder(models.Model):
     @api.model
     def get_invoice_total_amount(self, invoices):
         total_amount = 0.0
-        for invoice in invoices:
-            (
-                invoice_partials,
-                exchange_diff_moves,
-            ) = invoice._get_reconciled_invoices_partials()
+        # Iterate over each invoice using sudo
+        for invoice in invoices.sudo():
+            invoice_partials, exchange_diff_moves = invoice._get_reconciled_invoices_partials()
             for invoice_partial in invoice_partials:
-                (_partial,_amount,counterpart_line) = invoice_partial
+                (_partial, _amount, counterpart_line) = invoice_partial
+                # Use sudo() on payment_id fields where access might be restricted
+                payment_id = counterpart_line.sudo().payment_id
+                payment_method_code = payment_id.payment_method_id.sudo().code 
+                # Check the payment method and payment state with limited sudo()
                 if (
-                    counterpart_line.payment_id.payment_method_id.code
-                    == "batch_payment"
+                    payment_method_code == "batch_payment"
                     and invoice.payment_state in ["in_payment", "paid"]
-                    and counterpart_line.payment_id.is_matched
+                    and payment_id.is_matched
                 ):
-                    total_amount += counterpart_line.payment_id.amount
+                    total_amount += payment_id.amount
                 elif (
-                    counterpart_line.payment_id.payment_method_id.code
-                    != "batch_payment"
+                    payment_method_code != "batch_payment"
                     and invoice.payment_state in ["in_payment", "paid"]
                 ):
-                    total_amount += counterpart_line.payment_id.amount
+                    total_amount += payment_id.amount       
         return total_amount
