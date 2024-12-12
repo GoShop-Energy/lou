@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <data>
+        <template id="report_saleorder_document_customer" inherit_id="sale.report_saleorder_document">
+            <xpath expr="//div[@name='so_total_summary']//table" position="inside">
+             <t t-if="doc.is_same_curr == False">
+                <tr class="border-black o_total">   
+                    <td><strong>Exchange Rate</strong></td>
+                    <td class="text-end">
+                            <span t-field="doc.exchange_rate"/>
+                    </td>
+                </tr>
+                <tr class="border-black o_total">
+                    <td><strong>Amount in Company Currency</strong></td>
+                    <td class="text-end">
+                            <span t-field="doc.company_currency_amount"/>
+                    </td>
+                </tr>
+             </t>
+            </xpath>
+        </template>
+        <template id="report_saleorder_document_copy_assia" inherit_id="gse_custo.report_saleorder_document_copy">
+            <xpath expr="//div[@name='so_total_summary']//table" position="inside">
+             <t t-if="doc.is_same_curr == False">
+                <tr class="border-black o_total">   
+                    <td><strong>Exchange Rate</strong></td>
+                    <td class="text-end">
+                            <span t-field="doc.exchange_rate"/>
+                    </td>
+                </tr>
+                <tr class="border-black o_total">
+                    <td><strong>Amount in Company Currency</strong></td>
+                    <td class="text-end">
+                            <span t-field="doc.company_currency_amount"/>
+                    </td>
+                </tr>
+             </t>
+            </xpath>
+        </template>
+        <template id="report_invoice_document_assia" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@id='total']//table" position="inside">
+             <t t-if="o.is_same_curr == False">
+                <tr class="border-black o_total">   
+                    <td><strong>Exchange Rate</strong></td>
+                    <td class="text-end">
+                            <span t-field="o.exchange_rate"/>
+                    </td>
+                </tr>
+                <tr class="border-black o_total">
+                    <td><strong>Amount in Company Currency</strong></td>
+                    <td class="text-end">
+                            <span t-field="o.company_currency_amount"/>
+                    </td>
+                </tr>
+             </t>
+            </xpath>
+        </template>
+
+        
+    </data>
+</odoo>
