@@ -3,8 +3,8 @@
 
 {
     "name": "Sale Payment Method ",
-    "summary": """Adds the payment method on the Customer and the Sale Order.""",
-    "version": "17.0.1.0.0",
+    "summary": """Adds the payment method on the Customer and the Sale Order. """,
+    "version": "17.0.1.0",
     "category": "Sale",
     "website": "https://sodexis.com/",
     "author": "Sodexis",
