@@ -1,4 +1,4 @@
-# Copyright 2020-2022 Sodexis
+# Copyright 2020-2023 Sodexis
 # License OPL-1 (See LICENSE file for full copyright and licensing details).
 
 from odoo import _, api, fields, models
@@ -16,7 +16,11 @@ class StockPicking(models.Model):
             )
         elif operator == "!=" and value:
             recs = self.search([]).filtered(
-                lambda x: x.hold_delivery_till_payment is False
+                lambda x: x.hold_delivery_till_payment is not True
+            )
+        elif operator == "!=" and not value:
+            recs = self.search([]).filtered(
+                lambda x: x.hold_delivery_till_payment is not False
             )
         return [("id", "in", [x.id for x in recs])]
 
@@ -135,17 +139,3 @@ class ProcurementGroup(models.Model):
         if not stock_allow_check_availability:
             domain = expression.AND([domain, [("id", "not in", hold_do_picking.ids)]])
         return domain
-
-
-class StockMove(models.Model):
-    _inherit = "stock.move"
-
-    def _action_assign(self, force_qty=False):
-        stock_allow_check_availability = (
-            self.env["ir.config_parameter"]
-            .sudo()
-            .get_param("credit_management.stock_allow_check_availability", False)
-        )
-        if not stock_allow_check_availability:
-            self = self.filtered(lambda x: not x.picking_id.hold_delivery_till_payment)
-        super()._action_assign(force_qty=force_qty)

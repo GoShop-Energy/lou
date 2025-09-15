@@ -1,5 +1,6 @@
-# Copyright 2020-2022 Sodexis
+# Copyright 2020-2023 Sodexis
 # License OPL-1 (See LICENSE file for full copyright and licensing details).
+
 
 from odoo import fields, models
 
@@ -7,7 +8,7 @@ from odoo import fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    credit_limit = fields.Float(groups=None, store=True, tracking=True)
+    credit_limit = fields.Float(groups=None)
     has_overdue_by_x_days = fields.Boolean(
         string="Has Overdue Invoices",
         compute="_compute_check_overdue_invoices",
@@ -15,15 +16,13 @@ class ResPartner(models.Model):
     )
     override_credit_threshold_limit = fields.Integer(
         string="Override credit Threshold",
-        help="Below a specified amount, "
-        "orders will automatically override the credit limit",
+        help="Below a specified amount, orders will automatically override the credit limit",
     )
     hold_delivery_till_payment = fields.Boolean(
         default=False,
         copy=False,
-        help="If True, then holds the DO until"
-        "invoices are paid and equals to the total amount on the SO",
-        tracking=True
+        help="If True, then holds the DO until  \
+                                    invoices are paid and equals to the total amount on the SO",
     )
     individual_credit_limit = fields.Boolean(
         string="Manage Individual Credit Limit",
@@ -73,23 +72,23 @@ class ResPartner(models.Model):
                 child_ids = tuple(self.search([("id", "child_of", partner.id)]).ids)
 
                 not_invoiced_order_lines_query = """
-select sum(
-    CASE
-        WHEN (sol.qty_invoiced >= 0) and (sol.product_uom_qty - sol.qty_invoiced) > 0
-        THEN (
-            (sol.product_uom_qty - sol.qty_invoiced) * (
-                sol.price_unit + (sol.price_tax / sol.product_uom_qty)))
-        ELSE 0
-    END
-)
-from
-    sale_order_line sol, sale_order so
-where
-    sol.order_id = so.id and
-    sol.order_partner_id in %s
-    and sol.state in %s
-    and sol.invoice_status != %s
-    and sol.company_id = %s
+                    select sum(
+                        CASE
+                            WHEN (sol.qty_invoiced >= 0) and
+                                (sol.product_uom_qty - sol.qty_invoiced) > 0
+                            THEN ((sol.product_uom_qty - sol.qty_invoiced) *
+                            (sol.price_unit + (sol.price_tax / sol.product_uom_qty)))
+                            ELSE 0
+                        END
+                    )
+                    from
+                        sale_order_line sol, sale_order so
+                    where
+                        sol.order_id = so.id and
+                        sol.order_partner_id in %s
+                        and sol.state in %s
+                        and sol.invoice_status != %s
+                        and sol.company_id = %s
                 """
 
                 if "active" in self.env["sale.order"]._fields:

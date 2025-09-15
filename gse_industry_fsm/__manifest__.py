@@ -10,6 +10,7 @@
     "website": "https://github.com/GoShop-Energy/field-service",
     "category": "Customizations",
     "version": "17.0.1.0",
+
     "license": "LGPL-3",
     "depends": [
         "base",

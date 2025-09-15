@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from odoo import api, fields, models, _
-LOCKED_FIELD_STATES = {
-    state: [('readonly', True)]
-    for state in {'done', 'cancel'}
-}
+from odoo import api, fields, models
+
 
 class SaleOrder(models.Model):
     _inherit = "sale.order"
@@ -35,9 +32,8 @@ class SaleOrder(models.Model):
         string="Service Location",
         compute='_compute_partner_service_id',
         store=True, readonly=False, required=True, precompute=True,
-        states=LOCKED_FIELD_STATES,
         domain="['|', ('company_id', '=', False), ('company_id', '=', company_id)]",)
-       
+
     terms_type = fields.Selection(related="company_id.terms_type")
 
     @api.depends("order_line.product_id.type", "order_line.product_id.service_tracking")
@@ -48,7 +44,7 @@ class SaleOrder(models.Model):
                 for line in order.order_line
             )
 
-    @api.depends('partner_service_id','partner_id')
+    @api.depends('partner_service_id', 'partner_id')
     def _compute_partner_service_id(self):
         for order in self:
             if order.partner_service_id.id == order.partner_id.id or order.partner_service_id.id in order.partner_id.child_ids.ids:

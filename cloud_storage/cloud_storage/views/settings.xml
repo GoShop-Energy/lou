@@ -1,0 +1,40 @@
+<odoo>
+    <record id="cloud_storage_config_settings_view_form" model="ir.ui.view">
+        <field name="name">cloud_storage_config_settings_view_form</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="70"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Cloud Storage" data-string="Cloud Storage" name="cloud_storage" groups="base.group_system">
+                    <block title="Cloud Storage" name="cloud_storage_settings">
+                        <setting id="cloud_storage" help="Store attachments in the cloud" >
+                            <field name="cloud_storage"/>
+                            <div class="content-group" invisible="cloud_storage != 'azure'">
+                                <div class="row mt16">
+                                    <label for="azure_container_name" class="o_light_label"/>
+                                    <field name="azure_container_name"/>
+                                </div>
+                                <div class="row">
+                                    <label for="azure_connect_str" class="o_light_label"/>
+                                    <field name="azure_connect_str"/>
+                                </div>
+                            </div>
+                            <div class="content-group" invisible="cloud_storage != 'google'">
+                                <div class="row mt16">
+                                    <label for="google_cloud_bucket_name" class="o_light_label"/>
+                                    <field name="google_cloud_bucket_name"/>
+                                </div>
+                                <div class="row">
+                                    <label for="google_cloud_account_info" class="o_light_label"/>
+                                    <field name="google_cloud_account_info"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
